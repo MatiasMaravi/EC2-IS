@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify,render_template
-from utils.calcular import calcular_distancia
+from calcular import calcular_distancia
 
 app = Flask(__name__)
 

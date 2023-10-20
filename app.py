@@ -1,7 +1,12 @@
 from flask import Flask, request, jsonify,render_template
-from calcular import calcular_distancia
+from clases import Factory,API,CSV,Mock
 
 app = Flask(__name__)
+#Registramos todos nuestros builders
+factory = Factory()
+factory.register_builder('api', API)
+factory.register_builder('csv', CSV)
+factory.register_builder('mock', Mock)
 
 @app.route('/')
 def index():
@@ -10,14 +15,9 @@ def index():
 
 @app.route('/calcular_distancia', methods=['POST'])
 def calcular_distancia_route():
-    city1 = request.form.get('city1')
-    country1 = request.form.get('country1')
-    city2 = request.form.get('city2')
-    country2 = request.form.get('country2')
-    metodo = request.form.get('metodo')
-
-    distancia = calcular_distancia(city1, country1, city2, country2,metodo)
-
+    response = request.form.to_dict()
+    objeto = factory.create(response['metodo'])
+    distancia = objeto.calcular_distancia(response['city1'],response['country1'],response['city2'],response['country2'])
     return jsonify({'distancia': distancia})
 
 if __name__ == '__main__':

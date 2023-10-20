@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Calculadora de Distancia</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            height: 100vh;
+            
+        }
+
+        #form-container {
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: left;
+        }
+
+        h1 {
+            margin-top: 10px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
+        button {
+            background-color: #007BFF;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        #result {
+            margin-top: 20px;
+        }
+
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .input-container {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .city-input,
+.country-input {
+    display: block;
+    margin-bottom: 10px;
+    padding-right: 100px;
+}
+    </style>
+</head>
+<body>
+    
+
+    <div id="form-container">
+        <label for="options">Selecciona una opción:</label>
+        <select id="options" onchange="mostrarCampos()">
+            <option value="csv">CSV</option>
+            <option value="api">API</option>
+            <option value="mock">MOK</option>
+        </select>
+
+        <div id="city1-country1" class="hidden input-container">
+            <div class="city-input">
+                <label for="city1">Ciudad 1</label>
+                <input type="text" id="city1" name="city1" required>
+            </div>
+            <div class="city-input">
+                <label for="country1">País 1:</label>
+                <input type="text" id="country1" name="country1" required>
+            </div>
+        </div>
+
+        <div id="city2-country2" class="hidden input-container">
+            <div class="city-input">
+                <label for="city2">Ciudad 2:</label>
+                <input type="text" id="city2" name "city2" required>
+            </div>
+            <div class="country-input">
+                <label for="city-input">País 2:</label>
+                <input type="text" id="country2" name="country2" required>
+            </div>
+        </div>
+
+        <button type="button" onclick="calcularDistancia()">Calcular Distancia</button>
+
+        <h2>Resultado</h2>
+    <div id="result"></div>
+    </div>
+
+    
+
+    <script>
+
+function mostrarCampos() {
+            var selectedOption = document.getElementById("options").value;
+            var city1Country1 = document.getElementById("city1-country1");
+            var city2Country2 = document.getElementById("city2-country2");
+
+            if (selectedOption === "csv" || selectedOption === "api" || selectedOption === "mock") {
+                city1Country1.classList.remove("hidden");
+                city2Country2.classList.remove("hidden");
+            } else {
+                city1Country1.classList.add("hidden");
+                city2Country2.classList.add("hidden");
+            }
+        }
+       
+
+        function calcularDistancia() {
+    var city1 = document.getElementById("city1").value;
+    var country1 = document.getElementById("country1").value;
+    var city2 = document.getElementById("city2").value;
+    var country2 = document.getElementById("country2").value;
+    var metodo = document.getElementById("options").value;
+    console.log(city1,city2,country1,country2,metodo);
+
+    var formData = new FormData();
+    formData.append('city1', city1);
+    formData.append('country1', country1);
+    formData.append('city2', city2);
+    formData.append('country2', country2);
+    formData.append('metodo', metodo);
+
+    fetch('/calcular_distancia', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        document.getElementById("result").innerHTML = "Distancia: " + data.distancia + " km";
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
+}
+
+    </script>
+</body>
+</html>

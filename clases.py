@@ -42,6 +42,10 @@ class API:
             return 0,0
     def calcular_distancia(self,ciudad1,pais1,ciudad2,pais2):
         # Verificamos si la solicitud fue exitosa (código de estado 200)
+        if((ciudad1 == ciudad2) and (pais1 == pais2)):
+            print("Error: Las ciudades son las mismas")
+            return 0
+            
         latitud1, longitud1 = self.obtener_coordenadas(ciudad1,pais1)
         latitud2, longitud2 = self.obtener_coordenadas(ciudad2,pais2)
         distancia = haversine(float(latitud1),float(longitud1),float(latitud2),float(longitud2))

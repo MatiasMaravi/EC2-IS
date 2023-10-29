@@ -1,8 +1,10 @@
 import pandas as pd
+import os
 from .utils.haversine import haversine
 class CSV:
     def __init__(self):
-        self.df = pd.read_csv("../data/worldcities.csv")
+        current_dir = os.getcwd()
+        self.df = pd.read_csv(current_dir+"/data/worldcities.csv")
     
     def obtener_coordenadas(self, city, country):
         result = (self.df["city_ascii"] == city) & (self.df["country"] == country)

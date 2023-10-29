@@ -1,12 +1,10 @@
 from flask import Flask, request, jsonify,render_template
-from clases import Factory,API,CSV,Mock
+from factory import Factory
 
 app = Flask(__name__)
 #Registramos todos nuestros builders
 factory = Factory()
-factory.register_builder('api', API)
-factory.register_builder('csv', CSV)
-factory.register_builder('mock', Mock)
+factory.load()
 
 @app.route('/')
 def index():
